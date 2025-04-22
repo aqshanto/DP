@@ -32,7 +32,7 @@ void lis(vector<int>& v) {
     int i = ansin.back();
     vector<int> res;
     while (i != -1) {
-        res.push_back(i);
+        res.push_back(v[i]);
         i = prev[i];
     }
 

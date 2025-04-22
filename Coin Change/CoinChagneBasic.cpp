@@ -1,63 +1,58 @@
+// C++ program to find minimum of coins
+// to make a given change sum
 #include <bits/stdc++.h>
 using namespace std;
-#define int long long
-#define double long double
-#define endl "\n"
-#define inputarr(v, n) \
-    for (int i = 0; i < n; i++) cin >> v[i];
 
-#define printarr(v)                    \
-    for (int i = 0; i < v.size(); i++) \
-        cout << v[i] << " ";           \
-    cout << endl;
+// Function to find the minimum number of
+// coins needed to make the given sum
+int minCoins(vector<int> &coins, int sum) {
+    // Create a DP array to store the minimum coins
+    // for each value up to sum
+    vector<int> dp(sum + 1, INT_MAX);
 
-//---------------------------------------//
+    // Base case: 0 coins are needed to make sum 0
+    dp[0] = 0;
 
-void solve() {
-    int n, money;
-    cin >> money >> n;
-    vector<int> v(n + 1, 0);
-    for (int i = 1; i <= n; i++) cin >> v[i];
-    int dp[n + 1][money + 1];
-    for (int i = 0; i <= n; i++) {
-        dp[i][0] = 0;
-    }
-    for (int j = 1; j <= money; j++) {
-        dp[0][j] = money + rand();
-    }
+    // Iterate over each coin in the coins array
+    for (int i = coins.size() - 1; i >= 0; i--) {
+        // Iterate through all sums from 1 to the given sum
+        for (int j = 1; j <= sum; j++) {
+            // Initialize take and noTake variables
+            int take = INT_MAX, noTake = INT_MAX;
 
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= money; j++) {
-            if (j < v[i]) {
-                dp[i][j] = dp[i - 1][j];
-            } else {
-                dp[i][j] = min(dp[i - 1][j], 1 + dp[i][j - v[i]]);
+            // Check if we can take the current coin
+            if (j - coins[i] >= 0 && coins[i] > 0) {
+                // Get the minimum coins needed for
+                // the remaining sum
+                take = dp[j - coins[i]];
+
+                // Increment take if it's a valid option
+                if (take != INT_MAX) take++;
             }
+
+            // If we have more coins available,
+            // consider not taking the current coin
+
+            if (i + 1 < coins.size())
+                // Get the minimum coins needed without
+                // taking the current coi
+                noTake = dp[j];
+
+            // Update the DP array with the minimum of
+            // taking or not taking the coin
+            dp[j] = min(take, noTake);
         }
     }
 
-    cout << 0 << " ";
-    for (int k = 0; k <= money; k++) cout << k << " ";
-    cout << endl;
-    for (int i = 0; i <= n; i++) {
-        cout << v[i] << " ";
-        for (int j = 0; j <= money; j++) {
-            cout << dp[i][j] << " ";
-        }
-        cout << endl;
-    }
-
-    cout << "The minimum number of coin needed will be " << dp[n][money] << endl;
+    // found a solution, return the minimum
+    // coins needed, otherwise return -1
+    if (dp[sum] != INT_MAX) return dp[sum];
+    return -1;
 }
 
-signed main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    int t = 1, Case = 1;
-    // cin>>t;
-    while (t--) {
-        // cout << "Case " << Case++ << ": ";
-        solve();
-    }
+int main() {
+    vector<int> coins = {9, 6, 5, 1};
+    int sum = 19;
+    cout << minCoins(coins, sum);
     return 0;
 }
