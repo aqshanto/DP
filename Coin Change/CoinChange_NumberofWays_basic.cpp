@@ -15,10 +15,11 @@ using namespace std;
 
 void solve() {
     int n, money;
-    cin >> money >> n;
+    cin >> n >> money;
     vector<int> v(n + 1, 0);
     for (int i = 1; i <= n; i++) cin >> v[i];
     int dp[n + 1][money + 1];
+    memset(dp, 0, sizeof(dp));
     for (int i = 0; i <= n; i++) {
         dp[i][0] = 1;
     }
