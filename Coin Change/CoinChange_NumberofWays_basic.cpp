@@ -23,9 +23,6 @@ void solve() {
     for (int i = 0; i <= n; i++) {
         dp[i][0] = 1;
     }
-    for (int j = 1; j <= money; j++) {
-        dp[0][j] = 0;
-    }
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= money; j++) {
             if (j < v[i]) {
